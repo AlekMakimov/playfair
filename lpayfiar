@@ -1,0 +1,48 @@
+
+def stowrzklucz(klucz):
+    klucz = klucz.upper().replace("J", "I")
+    alphabet = string.ascii_uppercase.replace("J", "")
+    klucz_matrix = []
+    for litera in key:
+        if litera not in klucz_matrix:
+           klucz_matrix.append(litera)
+    for litera in alphabet:
+        if litera not in klucz_matrix:
+            klucz_matrix.append(litera)
+    klucz_matrix = [key_matrix[i:i+5] for i in range(0, 25, 5)]
+    return klucz_matrix
+
+def znajdz(klucz_matrix, litera):
+    for i in range(5):
+        for j in range(5):
+            if klucz_matrix[i][j] == litera:
+                return (i, j)
+
+
+def szyfruj(tekst, klucz):
+    tekst = tekst.upper().replace("J", "I")
+    klucz_matrix = stowrzklucz(klucz)
+    szyfr = ""
+    for i in range(0, len(tekst), 2):
+        letter1 = tekst[i]
+        letter2 = tekst[i+1] if i+1 < len(tekst) else "X"
+        if letter1 == letter2:
+            letter2 = "X"
+        row1, col1 = zdnajdz(klucz_matrix, letter1)
+        row2, col2 = zdnajdz(klucz_matrix, letter2)
+        if row1 == row2:
+            szyfr += klucz_matrix[row1][(col1+1)%5]
+            szyfr += klucz_matrix[row2][(col2+1)%5]
+        elif col1 == col2:
+            szyfr += klucz_matrix[(row1+1)%5][col1]
+            szyfr += klucz_matrix[(row2+1)%5][col2]
+        else:
+            szyfr += klucz_matrix[row1][col2]
+            szyfr += klucz_matrix[row2][col1]
+    return szyfr
+
+
+tekst = input("jaki tekst chcesz zaszyfrowac?: ")
+klucz = input("jakie jest slowo kluczowe?: ")
+szyfr = szyfruj(tekst, klucz)
+print(szyfr)
